@@ -1,4 +1,4 @@
-package guru.springframework.springconfig.data;
+package guru.springframework.springconfig.properties;
 
 /*
 PROJECT NAME : 5. Spring Framework Configuration
