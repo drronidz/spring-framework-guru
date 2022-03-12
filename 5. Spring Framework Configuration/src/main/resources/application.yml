@@ -1,0 +1,9 @@
+guru:
+  jms:
+    username: JMS_USERNAME
+    passowrd: JMS_PASSWORD
+    url: SOME_URL
+  datasource:
+    username: DATASOURCE_USERNAME
+    password: DATASOURCE_PASSWORD
+    url: DATASOURCE_URL
