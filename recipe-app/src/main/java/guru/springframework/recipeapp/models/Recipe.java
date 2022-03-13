@@ -8,6 +8,7 @@ DATE : 3/13/2022 10:19 PM
 */
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Recipe {
@@ -26,6 +27,9 @@ public class Recipe {
 
     // TODO
     // private Difficulty difficulty
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    private Set<Ingredient> ingredients;
 
     @Lob
     private Byte[] image;
