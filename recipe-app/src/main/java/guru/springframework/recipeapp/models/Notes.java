@@ -7,8 +7,14 @@ Author Name : @ DRRONIDZ
 DATE : 3/13/2022 10:21 PM
 */
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
+@Getter
+@Setter
 @Entity
 public class Notes {
     @Id
@@ -20,36 +26,4 @@ public class Notes {
 
     @Lob
     private String recipeNotes;
-
-    public Notes() {
-    }
-
-    public Notes(Recipe recipe, String recipeNotes) {
-        this.recipe = recipe;
-        this.recipeNotes = recipeNotes;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
-    }
-
-    public String getRecipeNotes() {
-        return recipeNotes;
-    }
-
-    public void setRecipeNotes(String recipeNotes) {
-        this.recipeNotes = recipeNotes;
-    }
 }
