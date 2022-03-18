@@ -1,0 +1,33 @@
+package guru.springframework.recipeapp.converters;
+
+/*
+PROJECT NAME : recipe-app
+Module NAME: IntelliJ IDEA
+Author Name : @ DRRONIDZ
+DATE : 3/18/2022 11:41 AM
+*/
+
+import guru.springframework.recipeapp.commands.NotesCommand;
+import guru.springframework.recipeapp.models.Notes;
+import lombok.Synchronized;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
+
+@Component
+public class NotesCommandToNotes implements Converter<NotesCommand, Notes> {
+
+    @Synchronized
+    @Nullable
+    @Override
+    public Notes convert(NotesCommand source) {
+        if (source == null) {
+            return null;
+        }
+
+        final Notes notes = new Notes();
+        notes.setId(source.getId());
+        notes.setRecipeNotes(source.getRecipeNotes());
+        return notes;
+    }
+}

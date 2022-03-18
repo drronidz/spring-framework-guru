@@ -7,6 +7,7 @@ Author Name : @ DRRONIDZ
 DATE : 3/15/2022 3:05 PM
 */
 
+import guru.springframework.recipeapp.commands.RecipeCommand;
 import guru.springframework.recipeapp.models.Recipe;
 
 import java.util.Set;
@@ -14,4 +15,5 @@ import java.util.Set;
 public interface RecipeService {
     Set<Recipe> getRecipes();
     Recipe findById(Long id);
+    RecipeCommand saveRecipeCommand(RecipeCommand command);
 }
