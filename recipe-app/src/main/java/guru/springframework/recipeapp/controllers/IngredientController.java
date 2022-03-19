@@ -72,17 +72,17 @@ public class IngredientController {
         if (recipeCommand == null) {
             new RuntimeException("there is no recipeCommand with this id" + recipeId);
         }
-        // We need to return back parent id for hidden form property ...
-        IngredientCommand ingredientCommand = new IngredientCommand();
-        ingredientCommand.setRecipeId(Long.valueOf(recipeId));
-        model.addAttribute("ingredient", ingredientCommand);
+            // We need to return back parent id for hidden form property ...
+            IngredientCommand ingredientCommand = new IngredientCommand();
+            ingredientCommand.setRecipeId(Long.valueOf(recipeId));
+            model.addAttribute("ingredient", ingredientCommand);
 
-        // Init unit of measure ...
-        ingredientCommand.setUnitOfMeasureCommand(new UnitOfMeasureCommand());
+            // Init unit of measure ...
+            ingredientCommand.setUnitOfMeasureCommand(new UnitOfMeasureCommand());
 
-        model.addAttribute("unitOfMeasureList", unitOfMeasureService.getAllUnitsOfMeasureCommands());
+            model.addAttribute("unitOfMeasureList", unitOfMeasureService.getAllUnitsOfMeasureCommands());
 
-        return "recipe/ingredient/form";
+            return "recipe/ingredient/form";
 
     }
 
@@ -94,6 +94,17 @@ public class IngredientController {
         log.debug("Saved recipe id : " + savedCommand.getRecipeId());
         log.debug("Saved ingredient id: " + savedCommand.getId());
 
-        return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredient/" + savedCommand.getId() + "/show";
+        return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredients";
+    }
+
+    @GetMapping
+    @RequestMapping("recipe/{recipeId}/ingredient/{ingredientId}/delete")
+    public String deleteIngredient(@PathVariable String recipeId,
+                                   @PathVariable String ingredientId) {
+
+        log.debug("Deleting an Ingredient with id : " + ingredientId);
+        ingredientService.deleteById(Long.valueOf(recipeId), Long.valueOf(ingredientId));
+
+        return "redirect:/recipe/" + recipeId + "/ingredients";
     }
 }
