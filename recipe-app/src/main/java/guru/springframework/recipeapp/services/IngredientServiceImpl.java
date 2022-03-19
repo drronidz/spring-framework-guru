@@ -8,12 +8,16 @@ DATE : 3/19/2022 12:46 PM
 */
 
 import guru.springframework.recipeapp.commands.IngredientCommand;
+import guru.springframework.recipeapp.converters.IngredientCommandToIngredient;
 import guru.springframework.recipeapp.converters.IngredientToIngredientCommand;
+import guru.springframework.recipeapp.models.Ingredient;
 import guru.springframework.recipeapp.models.Recipe;
 import guru.springframework.recipeapp.repositories.RecipeRepository;
+import guru.springframework.recipeapp.repositories.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Slf4j
@@ -21,12 +25,18 @@ import java.util.Optional;
 public class IngredientServiceImpl implements IngredientService{
 
     private final IngredientToIngredientCommand ingredientToIngredientCommand;
+    private final IngredientCommandToIngredient ingredientCommandToIngredient;
     private final RecipeRepository recipeRepository;
+    private final UnitOfMeasureRepository unitOfMeasureRepository;
 
     public IngredientServiceImpl(IngredientToIngredientCommand ingredientToIngredientCommand,
-                                 RecipeRepository recipeRepository) {
+                                 IngredientCommandToIngredient ingredientCommandToIngredient,
+                                 RecipeRepository recipeRepository,
+                                 UnitOfMeasureRepository unitOfMeasureRepository) {
         this.ingredientToIngredientCommand = ingredientToIngredientCommand;
+        this.ingredientCommandToIngredient = ingredientCommandToIngredient;
         this.recipeRepository = recipeRepository;
+        this.unitOfMeasureRepository = unitOfMeasureRepository;
     }
 
     @Override
@@ -50,5 +60,45 @@ public class IngredientServiceImpl implements IngredientService{
         }
 
         return ingredientCommandOptional.get();
+    }
+
+    @Override
+    @Transactional
+    public IngredientCommand saveIngredientCommand(IngredientCommand ingredientCommand) {
+        Optional<Recipe> recipeOptional = recipeRepository.findById(ingredientCommand.getRecipeId());
+
+        if (!recipeOptional.isPresent()) {
+            // display this error if not found!
+            log.error("Recipe not found for id : " + ingredientCommand.getRecipeId());
+            return new IngredientCommand();
+        } else {
+            Recipe recipe = recipeOptional.get();
+
+            Optional<Ingredient> ingredientOptional = recipe.getIngredients()
+                    .stream()
+                    .filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId()))
+                    .findFirst();
+
+            if (ingredientOptional.isPresent()) {
+                Ingredient ingredientFound = ingredientOptional.get();
+                ingredientFound.setDescription(ingredientCommand.getDescription());
+                ingredientFound.setAmount(ingredientCommand.getAmount());
+                ingredientFound.setUnitOfMeasure(unitOfMeasureRepository
+                        .findById(ingredientCommand.getUnitOfMeasureCommand().getId())
+                        .orElseThrow(()-> new RuntimeException("Unit of Measure Not Found!")));
+            } else {
+                //Add new Ingredient
+                recipe.addIngredient(ingredientCommandToIngredient.convert(ingredientCommand));
+            }
+
+            Recipe savedRecipe = recipeRepository.save(recipe);
+
+            // Check for Failing ...
+            return ingredientToIngredientCommand.convert(savedRecipe.getIngredients()
+                    .stream()
+                    .filter(recipeIngredients -> recipeIngredients.getId().equals(ingredientCommand.getId()))
+                    .findFirst()
+                    .get());
+        }
     }
 }

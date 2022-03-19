@@ -9,7 +9,9 @@ DATE : 3/18/2022 11:17 AM
 
 import com.sun.istack.Nullable;
 import guru.springframework.recipeapp.commands.IngredientCommand;
+import guru.springframework.recipeapp.commands.UnitOfMeasureCommand;
 import guru.springframework.recipeapp.models.Ingredient;
+import guru.springframework.recipeapp.models.Recipe;
 import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -32,12 +34,26 @@ public class IngredientCommandToIngredient implements
         if (source == null) {
             return null;
         }
+
         final Ingredient ingredient = new Ingredient();
         ingredient.setId(source.getId());
+
+        if (source.getRecipeId() != null) {
+            Recipe recipe = new Recipe();
+            recipe.setId(source.getRecipeId());
+            ingredient.setRecipe(recipe);
+            recipe.addIngredient(ingredient);
+        }
         ingredient.getRecipe().setId(source.getRecipeId());
         ingredient.setDescription(source.getDescription());
         ingredient.setAmount(source.getAmount());
-        ingredient.setUnitOfMeasure(uomConverter.convert(source.getUnitOfMeasureCommand()));
+
+        UnitOfMeasureCommand unitOfMeasureCommand = new UnitOfMeasureCommand();
+        unitOfMeasureCommand.setId(source.getUnitOfMeasureCommand().getId());
+        unitOfMeasureCommand.setDescription(source.getUnitOfMeasureCommand().getDescription());
+
+        ingredient.setUnitOfMeasure(uomConverter.convert(unitOfMeasureCommand));
+
         return ingredient;
     }
 }

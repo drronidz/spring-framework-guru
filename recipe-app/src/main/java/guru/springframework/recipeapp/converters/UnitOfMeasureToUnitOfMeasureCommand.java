@@ -21,14 +21,17 @@ public class UnitOfMeasureToUnitOfMeasureCommand implements Converter<UnitOfMeas
     @Nullable
     @Override
     public UnitOfMeasureCommand convert(UnitOfMeasure source) {
-        if (source == null) {
+        if (source != null) {
+            UnitOfMeasureCommand unitOfMeasureCommand = new UnitOfMeasureCommand();
+
+            unitOfMeasureCommand.setId(source.getId());
+            unitOfMeasureCommand.setDescription(source.getDescription());
+
+            return unitOfMeasureCommand;
+
+        } else {
+
             return null;
         }
-
-        UnitOfMeasureCommand unitOfMeasureCommand = new UnitOfMeasureCommand();
-        unitOfMeasureCommand.setId(source.getId());
-        unitOfMeasureCommand.setDescription(source.getDescription());
-
-        return unitOfMeasureCommand;
     }
 }

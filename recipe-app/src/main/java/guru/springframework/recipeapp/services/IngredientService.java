@@ -12,4 +12,5 @@ import guru.springframework.recipeapp.models.Ingredient;
 
 public interface IngredientService {
     IngredientCommand findByRecipeIdAndIngredientId(Long recipeId, Long ingredientId);
+    IngredientCommand saveIngredientCommand(IngredientCommand ingredientCommand);
 }
