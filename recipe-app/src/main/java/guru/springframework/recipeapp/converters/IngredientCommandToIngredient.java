@@ -34,6 +34,7 @@ public class IngredientCommandToIngredient implements
         }
         final Ingredient ingredient = new Ingredient();
         ingredient.setId(source.getId());
+        ingredient.getRecipe().setId(source.getRecipeId());
         ingredient.setDescription(source.getDescription());
         ingredient.setAmount(source.getAmount());
         ingredient.setUnitOfMeasure(uomConverter.convert(source.getUnitOfMeasureCommand()));

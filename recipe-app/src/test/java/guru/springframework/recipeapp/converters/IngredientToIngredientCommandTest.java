@@ -26,6 +26,7 @@ public class IngredientToIngredientCommandTest {
     private static final String DESCRIPTION = "Cheeseburger";
     private static final Long UNIT_OF_MEASURE_ID = new Long(2L);
     private static final Long ID_VALUE = new Long(1L);
+    private static final Long RECIPE_ID = new Long(3L);
 
     IngredientToIngredientCommand converter;
 
@@ -68,6 +69,8 @@ public class IngredientToIngredientCommandTest {
     @Test
     public void testConvertWithUnitOfMeasure() {
         //GIVEN
+        RECIPE.setId(RECIPE_ID);
+
         Ingredient ingredient = new Ingredient();
         ingredient.setId(ID_VALUE);
         ingredient.setRecipe(RECIPE);
@@ -86,6 +89,7 @@ public class IngredientToIngredientCommandTest {
         assertEquals(ID_VALUE, ingredientCommand.getId());
         assertNotNull(ingredientCommand.getUnitOfMeasureCommand());
         assertEquals(UNIT_OF_MEASURE_ID, ingredientCommand.getUnitOfMeasureCommand().getId());
+        assertEquals(RECIPE_ID, ingredientCommand.getRecipeId());
         assertEquals(AMOUNT, ingredientCommand.getAmount());
         assertEquals(DESCRIPTION, ingredientCommand.getDescription());
     }
