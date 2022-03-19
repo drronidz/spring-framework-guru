@@ -8,6 +8,8 @@ DATE : 3/19/2022 1:11 AM
 */
 
 import guru.springframework.recipeapp.commands.IngredientCommand;
+import guru.springframework.recipeapp.commands.RecipeCommand;
+import guru.springframework.recipeapp.commands.UnitOfMeasureCommand;
 import guru.springframework.recipeapp.services.IngredientService;
 import guru.springframework.recipeapp.services.RecipeService;
 import guru.springframework.recipeapp.services.UnitOfMeasureService;
@@ -59,6 +61,29 @@ public class IngredientController {
         model.addAttribute("unitOfMeasureList", unitOfMeasureService.getAllUnitsOfMeasureCommands());
 
         return "recipe/ingredient/form";
+    }
+
+    @GetMapping
+    @RequestMapping("recipe/{recipeId}/ingredient/new")
+    public String newIngredient(@PathVariable String recipeId, Model model) {
+        // Make sure that we have a good id value
+        RecipeCommand recipeCommand = recipeService.findRecipeCommandById(Long.valueOf(recipeId));
+        // Raise an exception if it's null
+        if (recipeCommand == null) {
+            new RuntimeException("there is no recipeCommand with this id" + recipeId);
+        }
+        // We need to return back parent id for hidden form property ...
+        IngredientCommand ingredientCommand = new IngredientCommand();
+        ingredientCommand.setRecipeId(Long.valueOf(recipeId));
+        model.addAttribute("ingredient", ingredientCommand);
+
+        // Init unit of measure ...
+        ingredientCommand.setUnitOfMeasureCommand(new UnitOfMeasureCommand());
+
+        model.addAttribute("unitOfMeasureList", unitOfMeasureService.getAllUnitsOfMeasureCommands());
+
+        return "recipe/ingredient/form";
+
     }
 
     @PostMapping

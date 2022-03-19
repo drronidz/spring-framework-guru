@@ -99,4 +99,25 @@ public class IngredientControllerTest {
                 .andExpect(model().attributeExists("ingredient"))
                 .andExpect(model().attributeExists("unitOfMeasureList"));
     }
+
+    @Test
+    public void newIngredientForm() throws Exception {
+        // GIVEN
+        RecipeCommand recipeCommand = new RecipeCommand();
+        recipeCommand.setId(1L);
+
+        //WHEN
+        when(recipeService.findRecipeCommandById(any())).thenReturn(recipeCommand);
+        when(unitOfMeasureService.getAllUnitsOfMeasureCommands()).thenReturn(new HashSet<>());
+
+        //THEN
+        mockMvc.perform(get("/recipe/1/ingredient/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/ingredient/form"))
+                .andExpect(model().attributeExists("ingredient"))
+                .andExpect(model().attributeExists("unitOfMeasureList"));
+
+        verify(recipeService, times(1)).findRecipeCommandById(any());
+        verify(unitOfMeasureService, times(1)).getAllUnitsOfMeasureCommands();
+    }
 }
