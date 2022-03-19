@@ -79,4 +79,17 @@ public class RecipeServiceImplTest {
     @Test
     public void saveRecipeCommand() {
     }
+
+    @Test
+    public void deleteById() throws Exception {
+
+        //GIVEN
+        Long id = Long.valueOf(2L);
+
+        //WHEN
+        recipeService.deleteById(id);
+
+        //THEN
+        verify(recipeRepository, times(1)).deleteById(anyLong());
+    }
 }
