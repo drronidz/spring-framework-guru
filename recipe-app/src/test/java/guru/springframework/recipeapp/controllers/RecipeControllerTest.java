@@ -1,6 +1,7 @@
 package guru.springframework.recipeapp.controllers;
 
 import guru.springframework.recipeapp.commands.RecipeCommand;
+import guru.springframework.recipeapp.models.Difficulty;
 import guru.springframework.recipeapp.models.Recipe;
 import guru.springframework.recipeapp.services.RecipeService;
 import org.junit.Before;
@@ -75,6 +76,7 @@ public class RecipeControllerTest {
     @Test
     public void postRecipeForm() throws Exception {
         RecipeCommand recipeCommand = new RecipeCommand();
+        recipeCommand.setDifficulty(Difficulty.KIND_OF_HARD);
         recipeCommand.setId(2L);
 
         when(recipeService.saveRecipeCommand(any())).thenReturn(recipeCommand);

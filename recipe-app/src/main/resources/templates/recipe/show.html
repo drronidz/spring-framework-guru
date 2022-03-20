@@ -47,7 +47,7 @@
                                 <h5>Difficulty:</h5>
                             </div>
                             <div class="col-md-3">
-                                <h5 style="font-weight: bold" th:text="${recipe.difficulty}">Easy</h5>
+                                <h5 style="font-weight: bold" th:text="${recipe.difficulty.name().replace('_',' ')}">Easy</h5>
                             </div>
                         </div>
                         <div class="row">
